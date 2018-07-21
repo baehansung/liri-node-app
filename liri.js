@@ -38,14 +38,34 @@ var tweets = function() {
   });
 }
 
-
-var spotifySong = function() {
+//Function to find info of user's searched song via Spotify
+var spotifyInfo = function(songName) {
 
   var spotify = new Spotify(keys.spotify);
+  var songName = process.argv.slice(3).join(" "); 
 
+  if(!songName) {
+    songName = "The Sign Ace of Base";
+  }
+
+  spotify.search({ type: 'track', query: songName }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    } else {
+
+      songName = argv[3];
+
+      console.log(
+        '\n'+ "Artist: " + data.tracks.items[0].artists[0].name +
+        '\n' + "Song Title: " + "'" + data.tracks.items[0].name + "'" +
+        '\n' + "Album: " + data.tracks.items[0].album.name +
+        '\n' + "URL: " + data.tracks.items[0].preview_url + 
+        '\n'
+      );
+    }
+  });
 
 }
-
 
 var argv = process.argv;
 var liriCommand = argv[2];
@@ -53,10 +73,11 @@ var liriCommand = argv[2];
 // if statement to execute function based on user's command
 if(liriCommand === 'my-tweets') {
   tweets();
+
 } else if(liriCommand === 'spotify-this-song') {
-    
+  // spotify.spotifyInfo(thirdArgv);
+  spotifyInfo();
+
 } else {
   console.log('\n' + "Invalid command; Please try again" + '\n');
 }
-
-
